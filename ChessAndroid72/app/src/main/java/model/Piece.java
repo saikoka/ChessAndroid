@@ -1,4 +1,4 @@
-package chess;
+package model;
 
 /**This abstract class provides the general structure of a Chess piece
  * @author Shanmukh Koka and Marc Fortich

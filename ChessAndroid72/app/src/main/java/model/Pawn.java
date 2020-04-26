@@ -1,4 +1,4 @@
-package chess;
+package model;
 /**This class implements the Pawn object which inherits the abstract piece class
  * @author Shanmukh Koka and Marc Fortich
  *

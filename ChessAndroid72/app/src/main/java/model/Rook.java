@@ -1,4 +1,4 @@
-package chess;
+package model;
 /**This class implements the Rook object, which extends the Piece class
  * @author Shanmukh Koka and Marc Fortich
  *
