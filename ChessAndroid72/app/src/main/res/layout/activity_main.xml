@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_centerInParent="true"
     tools:context=".MainActivity">
 
 
@@ -15,5 +16,6 @@
         android:numColumns="8"
         android:gravity="center"
         android:columnWidth="50dp"
+
         />
 </RelativeLayout>

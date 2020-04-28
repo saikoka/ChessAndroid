@@ -7,6 +7,8 @@ import java.util.Scanner;
  *
  */
 public class Chess {
+
+    public static Piece[][] boardField;
     public static void main(String[] args){
         Piece[][] board = new Piece[8][8];
         board[0][0]= new Rook(true, 0,0);
@@ -52,6 +54,7 @@ public class Chess {
         boolean turn=false; //True means black's turn, false means white's.
         boolean draw = false;
         while(true) {
+            boardField=board;
             System.out.println();
 
             if (check){
