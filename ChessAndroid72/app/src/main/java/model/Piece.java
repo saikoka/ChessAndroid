@@ -5,11 +5,11 @@ package model;
  *
  */
 public abstract class Piece {
-    boolean color;//True for black, false for white
-    char type;
-    int x;
-    int y;
-    boolean special;
+    public boolean color;//True for black, false for white
+    public char type;
+    public int x;
+    public int y;
+    public boolean special;
     /*public Piece(boolean color, char type){
         this.color=color;
         this.type=type;
