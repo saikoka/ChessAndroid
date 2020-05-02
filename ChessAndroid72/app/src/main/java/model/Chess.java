@@ -7,8 +7,6 @@ import java.util.Scanner;
  *
  */
 public class Chess {
-
-    public static Piece[][] boardField;
     public static void main(String[] args){
         Piece[][] board = new Piece[8][8];
         board[0][0]= new Rook(true, 0,0);
@@ -54,7 +52,6 @@ public class Chess {
         boolean turn=false; //True means black's turn, false means white's.
         boolean draw = false;
         while(true) {
-            boardField=board;
             System.out.println();
 
             if (check){
@@ -195,10 +192,9 @@ public class Chess {
                 //}else{
                     //System.out.println("checking if white is in check");
                 //}
-
                 check=inCheck(board,turn);
                 if (check){
-                    if (checkMate(board, turn)){
+                    if (checkMate(board, turn,x2, y2)){
                         if(!turn){
                             System.out.println("Black wins");
                         }else {
@@ -222,7 +218,8 @@ public class Chess {
      * @param c boolean value used for getKing method
      * @return true if king is in mate, false otherwise
      */
-    public static boolean checkMate(Piece[][] board, boolean c){
+    public static boolean checkMate(Piece[][] board, boolean c, int x2, int y2){
+        //x2 y2 danger piece
 
         //find needed king
         int king = getKing(board, c);
@@ -487,8 +484,644 @@ public class Chess {
                 }
             }
         }
+
+        boolean canDangerBeEaten = canBeEaten(board, x2, y2);
+
+        if (canDangerBeEaten==true){
+            //System.out.println("can be eaten");
+            return false;
+        }
+        //System.out.println("cannot be eaten");
+
+        if(x2 == x){
+            //right
+            if (y2>y){
+                for (int i = y+1; i < y2; i++) {
+                    if (board[x][i]!=null){
+                        if(findFriend(board,x, i)){
+                            return false;
+                        }else {
+                            break;
+                        }
+                    }
+                }
+            }
+            if(y2<y) {
+                //left
+                for (int i = y - 1; i >= y2; i--) {
+                    if (board[x][i] != null) {
+                        if(findFriend(board,x, i)){
+                            return false;
+                        }else {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        if(y2 == y) {
+            //up
+            if(x2<x){
+                for (int i = x - 1; i >= x2; i--) {
+                    if (board[i][y] != null) {
+                        if(findFriend(board,i, y)){
+                            return false;
+                        }else {
+                            break;
+                        }
+                    }
+                }
+            }
+            //down
+            if(x2>x){
+                for (int i = x + 1; i < x2; i++) {
+                    if (board[i][y] != null) {
+                        if(findFriend(board,i, y)){
+                            return false;
+                        }else {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        if(x2<x) {
+
+            //ne
+            if (y2 > y) {
+                if (x > 0) {
+                    int right = y + 1;
+                    int up = x - 1;
+                    while (up >= x2 && right <= y2) {
+                        if (board[up][right] != null) {
+
+                        }
+                        right++;
+                        up--;
+                    }
+                }
+            }
+
+            //nw
+            if (y2 < y) {
+                if (x > 0) {
+                    int left = y - 1;
+                    int up = x - 1;
+                    while (left >= y2 && up >= x2) {
+                        if (board[up][left] != null) {
+                            if (findFriend(board, up, left)) {
+                                return false;
+                            } else {
+                                break;
+                            }
+                        }
+                        left--;
+                        up--;
+                    }
+                }
+            }
+
+        }
+
+        if(x2>x) {
+            //se
+            if (y2 > y) {
+                if (x < 7) {
+                    int right = y + 1;
+                    int down = x + 1;
+                    while (down <= x2 && right <= y2) {
+                        if (board[down][right] != null) {
+                            if (findFriend(board, down, right)) {
+                                return false;
+                            } else {
+                                break;
+                            }
+
+                        }
+                        right++;
+                        down++;
+                    }
+                }
+            }
+            //sw
+            if (y2 < y) {
+                if (x < 7) {
+                    int left = y - 1;
+                    int down = x + 1;
+                    while (left >= y2 && down <= x2) {
+                        if (board[down][left] != null) {
+                            if (findFriend(board, down, left)) {
+                                return false;
+                            } else {
+                                break;
+                            }
+
+                        }
+                        left--;
+                        down++;
+                    }
+                }
+            }
+        }
+
+            System.out.println();
+            printBoard(board);
+            System.out.println();
             System.out.println("Checkmate");
             return true;
+    }
+    public static boolean findFriend(Piece[][] board, int x, int y){
+
+        for (int i = y+1; i < 8; i++) {
+
+            if (board[x][i]!=null){
+                if (board[x][i].color==board[x][y].color &&
+                        (board[x][i].type=='Q' || board[x][i].type=='R') ){
+                    //System.out.println("q r");
+                    return true;
+                }else{
+                    break;
+                }
+            }
+        }
+        //left
+        for (int i = y-1; i >= 0; i--) {
+
+            if (board[x][i]!=null){
+                if (board[x][i].color==board[x][y].color &&
+                        (board[x][i].type=='Q' || board[x][i].type=='R') ){
+                    //System.out.println("q r 2");
+                    return true;
+                }else{
+                    break;
+                }
+            }
+        }
+        //up
+        for (int i = x-1; i >= 0; i--) {
+
+            if (board[i][y]!=null){
+                if (board[i][y].color==board[x][y].color &&
+                        (board[i][y].type=='Q' || board[i][y].type=='R') ){
+                    //System.out.println("q r 3");
+                    return true;
+                }else {
+                    break;
+                }
+            }
+        }
+        //down
+        for (int i = x+1; i <8; i++) {
+
+            if (board[i][y]!=null){
+                if (board[i][y].color==board[x][y].color &&
+                        (board[i][y].type=='Q' || board[i][y].type=='R') ){
+                    //System.out.println("q r 4");
+                    return true;
+                }else {
+                    break;
+                }
+            }
+        }
+        //ne
+        if (x>0){
+            int right = y+1;
+            int up= x-1;
+            while (up>=0 && right<=7){
+                if (board[up][right]!=null){
+                    if ((board[up][right].type=='B' || board[up][right].type=='Q')&&
+                            board[up][right].color==board[x][y].color){
+                        //System.out.println(" b q ");
+                        return true;
+                    }else {
+                        break;
+                    }
+                }
+                right++;
+                up--;
+            }
+        }
+
+        //nw
+        if (x>0){
+            int left = y-1;
+            int up = x-1;
+            while (left>=0 && up>=0) {
+                if (board[up][left] != null) {
+                    if ((board[up][left].type == 'B' || board[up][left].type=='Q')&&
+                            board[up][left].color == board[x][y].color) {
+                        //System.out.println("b q 2");
+                        return true;
+                    }else {
+                        break;
+                    }
+                }
+                left--;
+                up--;
+            }
+        }
+
+        //se
+        if (x<7){
+            int right = y+1;
+            int down= x+1;
+            while (down<=7 && right<=7){
+                if (board[down][right]!=null){
+                    if ((board[down][right].type=='B' || board[down][right].type=='Q')&&
+                            board[down][right].color==board[x][y].color){
+                        //System.out.println("b q 3");
+                        return true;
+                    }else {
+                        break;
+                    }
+                }
+                right++;
+                down++;
+            }
+        }
+
+        //sw
+        if (x<7){
+            int left = y-1;
+            int down = x+1;
+            while (left>=0 && down<=7) {
+                if (board[down][left] != null) {
+                    if ((board[down][left].type == 'B' || board[down][left].type=='Q')&&
+                            board[down][left].color == board[x][y].color) {
+                        //System.out.println(" b q 4");
+                        //System.out.println(down + left);
+                        return true;
+                    }else {
+                        break;
+                    }
+                }
+                left--;
+                down++;
+            }
+        }
+
+        //knight
+        //upright, x-2 y+1
+        if ( (x-2>=0) && (y+1<=7) ){
+            if ( board[x-2][y+1]!=null ){
+                if ( (board[x-2][y+1].type=='N') && (board[x-2][y+1].color==board[x][y].color) ){
+                    //System.out.println("in check!");
+                    return true;
+                }
+            }
+        }
+        //upleft, x-2 y-1
+        if ( (x-2>=0) && (y-1>=0) ){
+            if ( board[x-2][y-1]!=null ){
+                if ( (board[x-2][y-1].type=='N') && (board[x-2][y-1].color==board[x][y].color) ){
+                    //System.out.println("in check!");
+                    return true;
+                }
+            }
+        }
+        //rightup, x-1 y+2
+        if ( (x-1>=0) && (y+2<=7) ){
+            if ( board[x-1][y+2]!=null ){
+                if ( (board[x-1][y+2].type=='N') && (board[x-1][y+2].color==board[x][y].color) ){
+                    //System.out.println("in check!");
+                    return true;
+                }
+            }
+        }
+        //rightdown, x+1 y+2
+        if ( (x+1<=7) && (y+2<=7) ){
+            if ( board[x+1][y+2]!=null ){
+                if ( (board[x+1][y+2].type=='N') && (board[x+1][y+2].color==board[x][y].color) ){
+                    //System.out.println("in check!");
+                    return true;
+                }
+            }
+        }
+        //leftup, x-1 y-2
+        if ( (x-1>=0) && (y-2>=0) ){
+            if ( board[x-1][y-2]!=null ){
+                if ( (board[x-1][y-2].type=='N') && (board[x-1][y-2].color==board[x][y].color) ){
+                    //System.out.println("in check!");
+                    return true;
+                }
+            }
+        }
+        //leftdown, x+1 y-2
+        if ( (x+1<=7) && (y-2>=0) ){
+            if ( board[x+1][y-2]!=null ){
+                if ( (board[x+1][y-2].type=='N') && (board[x+1][y-2].color==board[x][y].color) ){
+                    //System.out.println("in check!");
+                    return true;
+                }
+            }
+        }
+        //downright, x+2 y+1
+        if ( (x+2<=7) && (y+1<=7) ){
+            if ( board[x+2][y+1]!=null ){
+                if ( (board[x+2][y+1].type=='N') && (board[x+2][y+1].color==board[x][y].color) ){
+                    //System.out.println("in check!");
+                    return true;
+                }
+            }
+        }
+        //downleft, x+2 y-1
+        if ( (x+2<=7) && (y-1>=0) ){
+            if ( board[x+2][y-1]!=null ){
+                if ( (board[x+2][y-1].type=='N') && (board[x+2][y-1].color==board[x][y].color) ){
+                    //System.out.println("in check!");
+                    return true;
+                }
+            }
+        }
+
+
+        //pawn
+
+        //black
+        if( (x-1>=7) ){
+            if(board[x-1][y]!=null){
+                if ( (board[x-1][y].type=='p') && (board[x-1][y].color==board[x][y].color) &&
+                        (board[x][y].color==true) ){
+                    //System.out.println("found black pawn friend");
+                    return true;
+                }
+            }
+        }
+
+
+
+        //white piece
+
+        if ( (x+1>=7) ){
+            if (board[x+1]!=null){
+                if ( (board[x+1][y].type=='p') && (board[x+1][y].color==board[x][y].color) &&
+                        (board[x][y].color==false)){
+                    //System.out.println("found white pawn friend");
+                    return true;
+                }
+            }
+
+        }
+
+        return false;
+    }
+
+    public static boolean canBeEaten(Piece[][] board, int x, int y){
+
+        for (int i = y+1; i < 8; i++) {
+
+            if (board[x][i]!=null){
+                if (board[x][i].color!=board[x][y].color &&
+                        (board[x][i].type=='Q' || board[x][i].type=='R') ){
+                    //System.out.println("in check!");
+                    return true;
+                }else{
+                    break;
+                }
+            }
+        }
+        //left
+        for (int i = y-1; i >= 0; i--) {
+
+            if (board[x][i]!=null){
+                if (board[x][i].color!=board[x][y].color &&
+                        (board[x][i].type=='Q' || board[x][i].type=='R') ){
+                    //System.out.println("in check!");
+                    return true;
+                }else{
+                    break;
+                }
+            }
+        }
+        //up
+        for (int i = x-1; i >= 0; i--) {
+
+            if (board[i][y]!=null){
+                if (board[i][y].color!=board[x][y].color &&
+                        (board[i][y].type=='Q' || board[i][y].type=='R') ){
+                    //System.out.println("in check!");
+                    return true;
+                }else {
+                    break;
+                }
+            }
+        }
+        //down
+        for (int i = x+1; i <8; i++) {
+
+            if (board[i][y]!=null){
+                if (board[i][y].color!=board[x][y].color &&
+                        (board[i][y].type=='Q' || board[i][y].type=='R') ){
+                    //System.out.println("in check!");
+                    return true;
+                }else {
+                    break;
+                }
+            }
+        }
+        //ne
+        if (x>0){
+            int right = y+1;
+            int up= x-1;
+            while (up>=0 && right<=7){
+                if (board[up][right]!=null){
+                    if ((board[up][right].type=='B' || board[up][right].type=='Q')&&
+                            board[up][right].color!=board[x][y].color){
+                        //System.out.println("in check!!!");
+                        return true;
+                    }else {
+                        break;
+                    }
+                }
+                right++;
+                up--;
+            }
+        }
+
+        //nw
+        if (x>0){
+            int left = y-1;
+            int up = x-1;
+            while (left>=0 && up>=0) {
+                if (board[up][left] != null) {
+                    if ((board[up][left].type == 'B' || board[up][left].type=='Q')&&
+                            board[up][left].color != board[x][y].color) {
+                        //System.out.println("in check!!!");
+                        return true;
+                    }else {
+                        break;
+                    }
+                }
+                left--;
+                up--;
+            }
+        }
+
+        //se
+        if (x<7){
+            int right = y+1;
+            int down= x+1;
+            while (down<=7 && right<=7){
+                if (board[down][right]!=null){
+                    if ((board[down][right].type=='B' || board[down][right].type=='Q')&&
+                            board[down][right].color!=board[x][y].color){
+                        //System.out.println("in check!!!");
+                        return true;
+                    }else {
+                        break;
+                    }
+                }
+                right++;
+                down++;
+            }
+        }
+
+        //sw
+        if (x<7){
+            int left = y-1;
+            int down = x+1;
+            while (left>=0 && down<=7) {
+                if (board[down][left] != null) {
+                    if ((board[down][left].type == 'B' || board[down][left].type=='Q')&&
+                            board[down][left].color != board[x][y].color) {
+                        //System.out.println("in check!!!");
+                        return true;
+                    }else {
+                        break;
+                    }
+                }
+                left--;
+                down++;
+            }
+        }
+
+        //knight
+        //upright, x-2 y+1
+        if ( (x-2>=0) && (y+1<=7) ){
+            if ( board[x-2][y+1]!=null ){
+                if ( (board[x-2][y+1].type=='N') && (board[x-2][y+1].color!=board[x][y].color) ){
+                    //System.out.println("in check!");
+                    return true;
+                }
+            }
+        }
+        //upleft, x-2 y-1
+        if ( (x-2>=0) && (y-1>=0) ){
+            if ( board[x-2][y-1]!=null ){
+                if ( (board[x-2][y-1].type=='N') && (board[x-2][y-1].color!=board[x][y].color) ){
+                    //System.out.println("in check!");
+                    return true;
+                }
+            }
+        }
+        //rightup, x-1 y+2
+        if ( (x-1>=0) && (y+2<=7) ){
+            if ( board[x-1][y+2]!=null ){
+                if ( (board[x-1][y+2].type=='N') && (board[x-1][y+2].color!=board[x][y].color) ){
+                    //System.out.println("in check!");
+                    return true;
+                }
+            }
+        }
+        //rightdown, x+1 y+2
+        if ( (x+1<=7) && (y+2<=7) ){
+            if ( board[x+1][y+2]!=null ){
+                if ( (board[x+1][y+2].type=='N') && (board[x+1][y+2].color!=board[x][y].color) ){
+                    //System.out.println("in check!");
+                    return true;
+                }
+            }
+        }
+        //leftup, x-1 y-2
+        if ( (x-1>=0) && (y-2>=0) ){
+            if ( board[x-1][y-2]!=null ){
+                if ( (board[x-1][y-2].type=='N') && (board[x-1][y-2].color!=board[x][y].color) ){
+                    //System.out.println("in check!");
+                    return true;
+                }
+            }
+        }
+        //leftdown, x+1 y-2
+        if ( (x+1<=7) && (y-2>=0) ){
+            if ( board[x+1][y-2]!=null ){
+                if ( (board[x+1][y-2].type=='N') && (board[x+1][y-2].color!=board[x][y].color) ){
+                    //System.out.println("in check!");
+                    return true;
+                }
+            }
+        }
+        //downright, x+2 y+1
+        if ( (x+2<=7) && (y+1<=7) ){
+            if ( board[x+2][y+1]!=null ){
+                if ( (board[x+2][y+1].type=='N') && (board[x+2][y+1].color!=board[x][y].color) ){
+                    //System.out.println("in check!");
+                    return true;
+                }
+            }
+        }
+        //downleft, x+2 y-1
+        if ( (x+2<=7) && (y-1>=0) ){
+            if ( board[x+2][y-1]!=null ){
+                if ( (board[x+2][y-1].type=='N') && (board[x+2][y-1].color!=board[x][y].color) ){
+                    //System.out.println("in check!");
+                    return true;
+                }
+            }
+        }
+
+
+        //pawn
+        //black king
+
+
+        //downleft
+        if( (x+1<=7) && (y-1>=0) ){
+            if(board[x+1][y-1]!=null){
+                if ( (board[x+1][y-1].type=='p') && (board[x+1][y-1].color!=board[x][y].color)  ){
+                    // System.out.println("Check");
+                    return true;
+                }
+            }
+        }//downright
+        else if( (x+1<=7) && (y+1<=7) ){
+            if (board[x+1][y+1]!=null){
+                if ( (board[x+1][y+1].type=='p') && (board[x+1][y+1].color!=board[x][y].color) ){
+                    //System.out.println("Check");
+                    return true;
+                }
+            }
+        }
+
+
+
+        //white king
+
+        //upleft
+        if ( (x-1>=0) && (y-1>=0) ){
+            if (board[x-1][y-1]!=null){
+                if ( (board[x-1][y-1].type=='p') && (board[x-1][y-1].color!=board[x][y].color)){
+                    //System.out.println("Check");
+                    return true;
+                }
+            }
+        }//upright
+        else if ( (x-1>=0) && (y+1<=7) ){
+            if (board[x-1][y+1]!=null){
+                if ( (board[x-1][y+1].type=='p') && (board[x-1][y+1].color!=board[x][y].color)){
+                    //System.out.println("Check");
+                    return true;
+                }
+            }
+        }
+
+
+
+
+
+
+
+        return false;
     }
 
     /**
@@ -760,7 +1393,6 @@ public class Chess {
                             }
                         }
                     }
-
 
 
 
@@ -1201,7 +1833,7 @@ public class Chess {
                     }
                 }
                 else{
-                    System.out.println("Movable value is: "+board[x1][y1].movable(x2,y2));
+                    //System.out.println("Movable value is: "+board[x1][y1].movable(x2,y2));
                     System.out.println("Illegal move, try again");
                     return false;
                 }
@@ -1498,9 +2130,9 @@ public class Chess {
 
 
             case 'p':
-                System.out.println("pog");
+                //System.out.println("pog");
                 if(board[x1][y1].movable(x2,y2)){
-                    System.out.println("XD");
+                    //System.out.println("XD");
                     if(board[x1][y1].color==false){//white
                         if(y1==y2 && (x2+2)==x1 && x1==6){//Can move by two if at original spot
                             if(board[x2][y2]==null && board[x2+1][y2]==null){
@@ -1565,6 +2197,33 @@ public class Chess {
 
                                         return true;
                                     }
+                                    else if(board[x2][y2]==null || board[x1][y1].color==board[x2][y2].color){
+                                        System.out.println("Illegal move, try again");
+                                        return false;
+                                    }
+                                    else{
+                                        board[x2][y2]=board[x1][y1];
+                                        board[x2][y2].x=x2;
+                                        board[x2][y2].y=y2;
+                                        board[x1][y1]=null;
+                                        if(x2==0){
+                                            if(promotion=='N'){
+                                                board[x2][y2]= new Knight(false, x2,y2);
+                                            }
+                                            else if(promotion=='B'){
+                                                board[x2][y2]= new Bishop(false, x2,y2);
+                                            }
+                                            else if(promotion=='R'){
+                                                board[x2][y2]= new Rook(false, x2,y2);
+                                            }
+                                            else{
+                                                board[x2][y2]= new Queen(false, x2,y2);
+                                            }
+                                        }
+                                        return true;
+                                    }
+
+                                }
                                 }
                                 else if(y2<y1){
                                     if(board[x2][y2]==null &&
@@ -1583,44 +2242,45 @@ public class Chess {
 
                                         return true;
                                     }
-
-                                }
-
-
-                                else if(board[x2][y2]==null || board[x1][y1].color==board[x2][y2].color){
-                                    System.out.println("Illegal move, try again");
-                                    return false;
-                                }
-                                else{
-                                    board[x2][y2]=board[x1][y1];
-                                    board[x2][y2].x=x2;
-                                    board[x2][y2].y=y2;
-                                    board[x1][y1]=null;
-                                    if(x2==0){
-                                        if(promotion=='N'){
-                                            board[x2][y2]= new Knight(false, x2,y2);
-                                        }
-                                        else if(promotion=='B'){
-                                            board[x2][y2]= new Bishop(false, x2,y2);
-                                        }
-                                        else if(promotion=='R'){
-                                            board[x2][y2]= new Rook(false, x2,y2);
-                                        }
-                                        else{
-                                            board[x2][y2]= new Queen(false, x2,y2);
-                                        }
+                                    else if(board[x2][y2]==null || board[x1][y1].color==board[x2][y2].color){
+                                        System.out.println("Illegal move, try again");
+                                        return false;
                                     }
-                                    return true;
+                                    else{
+                                        board[x2][y2]=board[x1][y1];
+                                        board[x2][y2].x=x2;
+                                        board[x2][y2].y=y2;
+                                        board[x1][y1]=null;
+                                        if(x2==0){
+                                            if(promotion=='N'){
+                                                board[x2][y2]= new Knight(false, x2,y2);
+                                            }
+                                            else if(promotion=='B'){
+                                                board[x2][y2]= new Bishop(false, x2,y2);
+                                            }
+                                            else if(promotion=='R'){
+                                                board[x2][y2]= new Rook(false, x2,y2);
+                                            }
+                                            else{
+                                                board[x2][y2]= new Queen(false, x2,y2);
+                                            }
+                                        }
+                                        return true;
+                                    }
+
                                 }
 
-                            }
+
+
+
+
                             else{
                                 return false;
                             }
                         }
                     }
                     else{//Black pawns
-                        System.out.println("rofl");
+                        //System.out.println("rofl");
                         if(y1==y2 && (x2-2)==x1 && x1==1){
                             if(board[x2][y2]==null && board[x2-1][y2]==null){
                                 board[x2][y2]=board[x1][y1];
@@ -1683,6 +2343,31 @@ public class Chess {
 
                                         return true;
                                     }
+                                    else if(board[x2][y2]==null || board[x1][y1].color==board[x2][y2].color){
+                                        System.out.println("Illegal move, try again");
+                                        return false;
+                                    }
+                                    else{
+                                        board[x2][y2]=board[x1][y1];
+                                        board[x2][y2].x=x2;
+                                        board[x2][y2].y=y2;
+                                        board[x1][y1]=null;
+                                        if(x2==7){
+                                            if(promotion=='N'){
+                                                board[x2][y2]= new Knight(true, x2,y2);
+                                            }
+                                            else if(promotion=='B'){
+                                                board[x2][y2]= new Bishop(true, x2,y2);
+                                            }
+                                            else if(promotion=='R'){
+                                                board[x2][y2]= new Rook(true, x2,y2);
+                                            }
+                                            else{
+                                                board[x2][y2]= new Queen(true, x2,y2);
+                                            }
+                                        }
+                                        return true;
+                                    }
                                 }
                                 else if(y2<y1){
                                     if(board[x2][y2]==null &&
@@ -1700,41 +2385,42 @@ public class Chess {
 
                                         return true;
                                     }
-
-                                }
-
-
-                                else
-
-
-
-
-
-                                if(board[x2][y2]==null || board[x1][y1].color==board[x2][y2].color){
-                                    System.out.println("Illegal move, try again");
-                                    return false;
-                                }
-                                else{
-                                    board[x2][y2]=board[x1][y1];
-                                    board[x2][y2].x=x2;
-                                    board[x2][y2].y=y2;
-                                    board[x1][y1]=null;
-                                    if(x2==7){
-                                        if(promotion=='N'){
-                                            board[x2][y2]= new Knight(true, x2,y2);
-                                        }
-                                        else if(promotion=='B'){
-                                            board[x2][y2]= new Bishop(true, x2,y2);
-                                        }
-                                        else if(promotion=='R'){
-                                            board[x2][y2]= new Rook(true, x2,y2);
-                                        }
-                                        else{
-                                            board[x2][y2]= new Queen(true, x2,y2);
-                                        }
+                                    else if(board[x2][y2]==null || board[x1][y1].color==board[x2][y2].color){
+                                        System.out.println("Illegal move, try again");
+                                        return false;
                                     }
-                                    return true;
+                                    else{
+                                        board[x2][y2]=board[x1][y1];
+                                        board[x2][y2].x=x2;
+                                        board[x2][y2].y=y2;
+                                        board[x1][y1]=null;
+                                        if(x2==7){
+                                            if(promotion=='N'){
+                                                board[x2][y2]= new Knight(true, x2,y2);
+                                            }
+                                            else if(promotion=='B'){
+                                                board[x2][y2]= new Bishop(true, x2,y2);
+                                            }
+                                            else if(promotion=='R'){
+                                                board[x2][y2]= new Rook(true, x2,y2);
+                                            }
+                                            else{
+                                                board[x2][y2]= new Queen(true, x2,y2);
+                                            }
+                                        }
+                                        return true;
+                                    }
+
                                 }
+
+
+
+
+
+
+
+
+
 
                             }
                             else{
@@ -1744,7 +2430,7 @@ public class Chess {
                     }
                 }
                 else{
-                    System.out.println("illegal move, try again");
+                    System.out.println("Illegal move, try again");
                     return false;
                 }
         }

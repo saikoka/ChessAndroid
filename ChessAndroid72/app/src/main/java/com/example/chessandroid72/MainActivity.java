@@ -19,13 +19,15 @@ import model.Piece;
 import model.Queen;
 import model.Rook;
 
-public class MainActivity extends AppCompatActivity {
-    public static Piece[][] board = new Piece[8][8];
+import static com.example.chessandroid72.BoardAdapter.board;
 
+public class MainActivity extends AppCompatActivity {
+    //public static Piece[][] board = new Piece[8][8];
+    private BoardAdapter customAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        board[0][0]= new Rook(true, 0,0);
+        /*board[0][0]= new Rook(true, 0,0);
         board[0][1]= new Knight(true,0,1);
         board[0][2]= new Bishop(true,0,2);
         board[0][3]= new Queen(true,0,3);
@@ -57,13 +59,13 @@ public class MainActivity extends AppCompatActivity {
         board[6][4]= new Pawn(false,6,4);
         board[6][5]= new Pawn(false,6,5);
         board[6][6]= new Pawn(false,6,6);
-        board[6][7]= new Pawn(false,6,7);
+        board[6][7]= new Pawn(false,6,7);*/
 
-
+        //Log.i("XD", "XD WAS HERE!!!!");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         GridView chessboard = (GridView) findViewById(R.id.chessboard);
-        final BoardAdapter customAdapter = new BoardAdapter(this, board);
+        customAdapter = new BoardAdapter(this);
         chessboard.setAdapter(customAdapter);
         chessboard.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             int currRow;
@@ -76,12 +78,12 @@ public class MainActivity extends AppCompatActivity {
                 int row = position/8;
                 int col = position%8;
                 if(clicked){
-                    Log.i("position", "position x is :"+row+"  pos y is :"+col);
-                    Log.i("position", "position x2 is :"+currRow+"  pos y2 is :"+currCol);
-                    board[4][4]=board[0][0];
-                    board[4][4].x=4;
-                    board[4][4].y=4;
-                    board[0][0]=null;
+                    //Log.i("position", "position x is :"+row+"  pos y is :"+col);
+                    //Log.i("position", "position x2 is :"+currRow+"  pos y2 is :"+currCol);
+                    board[row][col]=board[currRow][currCol];
+                    board[row][col].x=row;
+                    board[row][col].y=col;
+                    board[currRow][currCol]=null;
                     clicked=false;
                 }
                 else{
@@ -90,8 +92,9 @@ public class MainActivity extends AppCompatActivity {
                     clicked=true;
                 }
                 //Log.i("position", "position x is :"+row+"  pos y is :"+col);
-                customAdapter.notifyDataSetChanged();
 
+
+                customAdapter.notifyDataSetChanged();
             }
         });
 
