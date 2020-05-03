@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">ChessAndroid72</string>
+    <string-array name="promotion_array">
+        <item>Queen</item>
+        <item>Knight</item>
+        <item>Bishop</item>
+        <item>Rook</item>
+    </string-array>
 </resources>
