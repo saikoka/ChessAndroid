@@ -7,7 +7,7 @@ import java.util.Scanner;
  *
  */
 public class Chess {
-    public static void main(String[] args){
+    /*public static void main(String[] args){
         Piece[][] board = new Piece[8][8];
         board[0][0]= new Rook(true, 0,0);
         board[0][1]= new Knight(true,0,1);
@@ -119,7 +119,7 @@ public class Chess {
 
             }
 
-            boolean result=movePiece(x1,y1,x2,y2,board,turn, promotionPiece);
+            //boolean result=movePiece(x1,y1,x2,y2,board,turn, promotionPiece);
 
 
             if(check) {//already in check
@@ -210,7 +210,7 @@ public class Chess {
             System.out.println();
             printBoard(board);
         }
-    }
+    }*/
 
     /**
      * Checks if King is in checkmate
@@ -625,10 +625,10 @@ public class Chess {
             }
         }
 
-            System.out.println();
-            printBoard(board);
-            System.out.println();
-            System.out.println("Checkmate");
+            //System.out.println();
+            //printBoard(board);
+            //System.out.println();
+            //System.out.println("Checkmate");
             return true;
     }
     public static boolean findFriend(Piece[][] board, int x, int y){
@@ -1445,7 +1445,7 @@ public class Chess {
      * Print's current state of chess board in ASCII text.
      * @param x Current chess board state
      */
-    public static void printBoard(Piece[][] x){
+    /*public static void printBoard(Piece[][] x){
 
         for(int i=0;i<8;i++){
             int flip=0; //correct remainder of each column index to place ##
@@ -1466,7 +1466,7 @@ public class Chess {
             System.out.println(8-i);
         }
         System.out.println(" a  b  c  d  e  f  g  h");
-    }
+    }*/
 
     /**
      * Detects if piece can move to desired location. Checks for clear path, checks, etc.
@@ -1476,12 +1476,12 @@ public class Chess {
      * @param y2 column coordinate of piece's destination
      * @param board current board state
      * @param tf true for black, false for white
-     * @param promotion Detects piece user wants to promote pawn to
      * @return true if errors in moving the piece, false otherwise
      */
-    public static boolean movePiece(int x1, int y1, int x2, int y2,Piece[][] board,boolean tf, char promotion){//returns true if no errors, false if errors
+    public static boolean movePiece(int x1, int y1, int x2, int y2,Piece[][] board,boolean tf){//returns true if no errors, false if errors
+
         if((!tf && board[x1][y1].color)||(tf && !board[x1][y1].color)){//White's move, But select Black, or Black's move, but select White
-            System.out.println("Illegal move, try again");
+            //System.out.println("Illegal move, try again");
             return false;
         }
         switch(board[x1][y1].type){
@@ -1491,7 +1491,7 @@ public class Chess {
                         if(y2>y1){//traversing right
                             for(int a=y1+1;a<y2;a++){//See if piece is in the way
                                 if(board[x1][a]!=null){
-                                    System.out.println("Illegal move, try again");
+                                    //System.out.println("Illegal move, try again");
                                     return false;
                                 }
                             }
@@ -1504,7 +1504,7 @@ public class Chess {
                             }
                             else{//If not null, check color of piece at that spot
                                 if(board[x2][y2].color==board[x1][y1].color){
-                                    System.out.println("Illegal move, try again");
+                                    //System.out.println("Illegal move, try again");
                                     return false;
                                 }
                                 else{
@@ -1519,7 +1519,7 @@ public class Chess {
                         else{ //y1>y2-traversing left
                             for(int a=y1-1;a>=y2+1;a--){
                                 if(board[x1][a]!=null){
-                                    System.out.println("Illegal move, try again");
+                                    //System.out.println("Illegal move, try again");
                                     return false;
                                 }
                             }
@@ -1532,7 +1532,7 @@ public class Chess {
                             }
                             else if(board[x2][y2]!=null){
                                 if(board[x2][y2].color==board[x1][y1].color){
-                                    System.out.println("Illegal move, try again");
+                                    //System.out.println("Illegal move, try again");
                                     return false;
                                 }
                                 else{
@@ -1549,7 +1549,7 @@ public class Chess {
                         if(x2>x1){ //Traversing down
                             for(int a=x1+1;a<x2;a++){
                                 if(board[a][y1]!=null){
-                                    System.out.println("Illegal move, try again");
+                                    //System.out.println("Illegal move, try again");
                                     return false;
                                 }
                             }
@@ -1562,7 +1562,7 @@ public class Chess {
                             }
                             else if(board[x2][y2]!=null){
                                 if(board[x2][y2].color==board[x1][y1].color){
-                                    System.out.println("Illegal move, try again");
+                                    //System.out.println("Illegal move, try again");
                                     return false;
                                 }
                                 else{
@@ -1577,7 +1577,7 @@ public class Chess {
                         else{//x1>x2-traversing up
                             for(int a=x1-1;a>=x2+1;a--){
                                 if(board[a][y1]!=null){
-                                    System.out.println("Illegal move, try again");
+                                    //System.out.println("Illegal move, try again");
                                     return false;
                                 }
                             }
@@ -1590,7 +1590,7 @@ public class Chess {
                             }
                             else if(board[x2][y2]!=null){
                                 if(board[x2][y2].color==board[x1][y1].color){
-                                    System.out.println("Illegal move, try again");
+                                    //System.out.println("Illegal move, try again");
                                     return false;
                                 }
                                 else{
@@ -1605,7 +1605,7 @@ public class Chess {
                     }
                 }
                 else{
-                    System.out.println("Illegal move, try again");
+                    //System.out.println("Illegal move, try again");
                     return false;
                 }
                 break;
@@ -1633,7 +1633,7 @@ public class Chess {
                     }
                     else{
                         if(board[x2][y2].color==board[x1][y1].color){
-                            System.out.println("Illegal move, try again");
+                            //System.out.println("Illegal move, try again");
                             return false;
                         }
                         else{
@@ -1699,7 +1699,7 @@ public class Chess {
                 }
 
                 else{
-                    System.out.println("Illegal move, try again");
+                    //System.out.println("Illegal move, try again");
                     return false;
                 }
 
@@ -1712,7 +1712,7 @@ public class Chess {
                             int yLoop=y1-1;
                             while(xLoop>=0 &&xLoop>x2 && yLoop>=0 && yLoop>y2){
                                 if(board[xLoop][yLoop]!=null){
-                                    System.out.println("Illegal move, try again");
+                                    //System.out.println("Illegal move, try again");
                                     return false;
                                 }
                                 xLoop--;
@@ -1726,7 +1726,7 @@ public class Chess {
                                 return true;
                             }
                             else if(board[x2][y2].color==board[x1][y1].color){
-                                System.out.println("Illegal move, try again");
+                                //System.out.println("Illegal move, try again");
                                 return false;
                             }
                             else{
@@ -1742,7 +1742,7 @@ public class Chess {
                             int yLoop=y1+1;
                             while(xLoop>=0 &&xLoop>x2 && yLoop>=0 && yLoop<y2){
                                 if(board[xLoop][yLoop]!=null){
-                                    System.out.println("Illegal move, try again");
+                                    //System.out.println("Illegal move, try again");
                                     return false;
                                 }
                                 xLoop--;
@@ -1756,7 +1756,7 @@ public class Chess {
                                 return true;
                             }
                             else if(board[x2][y2].color==board[x1][y1].color){
-                                System.out.println("Illegal move, try again");
+                                //System.out.println("Illegal move, try again");
                                 return false;
                             }
                             else{
@@ -1774,7 +1774,7 @@ public class Chess {
                             int yLoop=y1-1;
                             while(xLoop>=0 &&xLoop<x2 && yLoop>=0 && yLoop>y2){
                                 if(board[xLoop][yLoop]!=null){
-                                    System.out.println("Illegal move, try again");
+                                    //System.out.println("Illegal move, try again");
                                     return false;
                                 }
                                 xLoop++;
@@ -1788,7 +1788,7 @@ public class Chess {
                                 return true;
                             }
                             else if(board[x2][y2].color==board[x1][y1].color){
-                                System.out.println("Illegal move, try again");
+                                //System.out.println("Illegal move, try again");
                                 return false;
                             }
                             else{
@@ -1805,7 +1805,7 @@ public class Chess {
                             while(xLoop>=0 &&xLoop<x2 && yLoop>=0 && yLoop<y2){
                                 if(board[xLoop][yLoop]!=null){
 
-                                    System.out.println("Illegal move, try again");
+                                    //System.out.println("Illegal move, try again");
                                     return false;
                                 }
                                 xLoop++;
@@ -1819,7 +1819,7 @@ public class Chess {
                                 return true;
                             }
                             else if(board[x2][y2].color==board[x1][y1].color){
-                                System.out.println("Illegal move, try again");
+                                //System.out.println("Illegal move, try again");
                                 return false;
                             }
                             else{
@@ -1834,7 +1834,7 @@ public class Chess {
                 }
                 else{
                     //System.out.println("Movable value is: "+board[x1][y1].movable(x2,y2));
-                    System.out.println("Illegal move, try again");
+                    //System.out.println("Illegal move, try again");
                     return false;
                 }
 
@@ -1844,7 +1844,7 @@ public class Chess {
                         if(y2>y1){//traversing right
                             for(int a=y1+1;a<y2;a++){//See if piece is in the way
                                 if(board[x1][a]!=null){
-                                    System.out.println("Illegal move, try again");
+                                    //System.out.println("Illegal move, try again");
                                     return false;
                                 }
                             }
@@ -1857,7 +1857,7 @@ public class Chess {
                             }
                             else{//If not null, check color of piece at that spot
                                 if(board[x2][y2].color==board[x1][y1].color){
-                                    System.out.println("Illegal move, try again");
+                                    //System.out.println("Illegal move, try again");
                                     return false;
                                 }
                                 else{
@@ -1872,7 +1872,7 @@ public class Chess {
                         else{ //y1>y2-traversing left
                             for(int a=y1-1;a>=y2+1;a--){
                                 if(board[x1][a]!=null){
-                                    System.out.println("Illegal move, try again");
+                                    //System.out.println("Illegal move, try again");
                                     return false;
                                 }
                             }
@@ -1885,7 +1885,7 @@ public class Chess {
                             }
                             else if(board[x2][y2]!=null){
                                 if(board[x2][y2].color==board[x1][y1].color){
-                                    System.out.println("Illegal move, try again");
+                                    //System.out.println("Illegal move, try again");
                                     return false;
                                 }
                                 else{
@@ -1902,7 +1902,7 @@ public class Chess {
                         if(x2>x1){ //Traversing down
                             for(int a=x1+1;a<x2;a++){
                                 if(board[a][y1]!=null){
-                                    System.out.println("Illegal move, try again");
+                                    //System.out.println("Illegal move, try again");
                                     return false;
                                 }
                             }
@@ -1915,7 +1915,7 @@ public class Chess {
                             }
                             else if(board[x2][y2]!=null){
                                 if(board[x2][y2].color==board[x1][y1].color){
-                                    System.out.println("Illegal move, try again");
+                                    //System.out.println("Illegal move, try again");
                                     return false;
                                 }
                                 else{
@@ -1930,7 +1930,7 @@ public class Chess {
                         else{//x1>x2-traversing up
                             for(int a=x1-1;a>=x2+1;a--){
                                 if(board[a][y1]!=null){
-                                    System.out.println("Illegal move, try again");
+                                    //System.out.println("Illegal move, try again");
                                     return false;
                                 }
                             }
@@ -1943,7 +1943,7 @@ public class Chess {
                             }
                             else if(board[x2][y2]!=null){
                                 if(board[x2][y2].color==board[x1][y1].color){
-                                    System.out.println("Illegal move, try again");
+                                    //System.out.println("Illegal move, try again");
                                     return false;
                                 }
                                 else{
@@ -1962,7 +1962,7 @@ public class Chess {
                             int yLoop=y1-1;
                             while(xLoop>=0 &&xLoop>x2 && yLoop>=0 && yLoop>y2){
                                 if(board[xLoop][yLoop]!=null){
-                                    System.out.println("Illegal move, try again");
+                                    //System.out.println("Illegal move, try again");
                                     return false;
                                 }
                                 xLoop--;
@@ -1976,7 +1976,7 @@ public class Chess {
                                 return true;
                             }
                             else if(board[x2][y2].color==board[x1][y1].color){
-                                System.out.println("Illegal move, try again");
+                                //System.out.println("Illegal move, try again");
                                 return false;
                             }
                             else{
@@ -1992,7 +1992,7 @@ public class Chess {
                             int yLoop=y1+1;
                             while(xLoop>=0 &&xLoop>x2 && yLoop>=0 && yLoop<y2){
                                 if(board[xLoop][yLoop]!=null){
-                                    System.out.println("Illegal move, try again");
+                                    //System.out.println("Illegal move, try again");
                                     return false;
                                 }
                                 xLoop--;
@@ -2006,7 +2006,7 @@ public class Chess {
                                 return true;
                             }
                             else if(board[x2][y2].color==board[x1][y1].color){
-                                System.out.println("Illegal move, try again");
+                                //System.out.println("Illegal move, try again");
                                 return false;
                             }
                             else{
@@ -2024,7 +2024,7 @@ public class Chess {
                             int yLoop=y1-1;
                             while(xLoop>=0 &&xLoop<x2 && yLoop>=0 && yLoop>y2){
                                 if(board[xLoop][yLoop]!=null){
-                                    System.out.println("Illegal move, try again");
+                                    //System.out.println("Illegal move, try again");
                                     return false;
                                 }
                                 xLoop++;
@@ -2038,7 +2038,7 @@ public class Chess {
                                 return true;
                             }
                             else if(board[x2][y2].color==board[x1][y1].color){
-                                System.out.println("Illegal move, try again");
+                                //System.out.println("Illegal move, try again");
                                 return false;
                             }
                             else{
@@ -2054,7 +2054,7 @@ public class Chess {
                             int yLoop=y1+1;
                             while(xLoop>=0 &&xLoop<x2 && yLoop>=0 && yLoop<y2){
                                 if(board[xLoop][yLoop]!=null){
-                                    System.out.println("Illegal move, try again");
+                                    //System.out.println("Illegal move, try again");
                                     return false;
                                 }
                                 xLoop++;
@@ -2068,7 +2068,7 @@ public class Chess {
                                 return true;
                             }
                             else if(board[x2][y2].color==board[x1][y1].color){
-                                System.out.println("Illegal move, try again");
+                                //System.out.println("Illegal move, try again");
                                 return false;
                             }
                             else{
@@ -2083,7 +2083,7 @@ public class Chess {
                 }
                 else{
 
-                    System.out.println("Illegal move, try again");
+                    //System.out.println("Illegal move, try again");
                     return false;
                 }
                 break;
@@ -2105,7 +2105,7 @@ public class Chess {
                     }
                     else{
                         if(board[x2][y2].color==board[x1][y1].color){
-                            System.out.println("Illegal move, try again");
+                            //System.out.println("Illegal move, try again");
                             return false;
                         }
                         else{
@@ -2124,7 +2124,7 @@ public class Chess {
                     }
                 }
                 else{
-                    System.out.println("Illegal move, try again");
+                    //System.out.println("Illegal move, try again");
                     return false;
                 }
 
@@ -2145,7 +2145,7 @@ public class Chess {
                                 return true;
                             }
                             else{
-                                System.out.println("Illegal move, try again");
+                                //System.out.println("Illegal move, try again");
                                 return false;
                             }
                         }
@@ -2156,8 +2156,9 @@ public class Chess {
                                 board[x2][y2].y=y2;
                                 board[x1][y1]=null;
                                 if(x2==0){
-                                    if(promotion=='N'){
+                                    /*if(promotion=='N'){
                                         board[x2][y2]= new Knight(false, x2,y2);
+
                                     }
                                     else if(promotion=='B'){
                                         board[x2][y2]= new Bishop(false, x2,y2);
@@ -2167,12 +2168,12 @@ public class Chess {
                                     }
                                     else{
                                         board[x2][y2]= new Queen(false, x2,y2);
-                                    }
+                                    }*/
                                 }
                                 return true;
                             }
                             else{
-                                System.out.println("Illegal move, try again");
+                               // System.out.println("Illegal move, try again");
                                 return false;
                             }
                         }
@@ -2198,7 +2199,7 @@ public class Chess {
                                         return true;
                                     }
                                     else if(board[x2][y2]==null || board[x1][y1].color==board[x2][y2].color){
-                                        System.out.println("Illegal move, try again");
+                                        //System.out.println("Illegal move, try again");
                                         return false;
                                     }
                                     else{
@@ -2207,7 +2208,7 @@ public class Chess {
                                         board[x2][y2].y=y2;
                                         board[x1][y1]=null;
                                         if(x2==0){
-                                            if(promotion=='N'){
+                                            /*if(promotion=='N'){
                                                 board[x2][y2]= new Knight(false, x2,y2);
                                             }
                                             else if(promotion=='B'){
@@ -2218,7 +2219,7 @@ public class Chess {
                                             }
                                             else{
                                                 board[x2][y2]= new Queen(false, x2,y2);
-                                            }
+                                            }*/
                                         }
                                         return true;
                                     }
@@ -2243,7 +2244,7 @@ public class Chess {
                                         return true;
                                     }
                                     else if(board[x2][y2]==null || board[x1][y1].color==board[x2][y2].color){
-                                        System.out.println("Illegal move, try again");
+                                        //System.out.println("Illegal move, try again");
                                         return false;
                                     }
                                     else{
@@ -2252,7 +2253,7 @@ public class Chess {
                                         board[x2][y2].y=y2;
                                         board[x1][y1]=null;
                                         if(x2==0){
-                                            if(promotion=='N'){
+                                            /*if(promotion=='N'){
                                                 board[x2][y2]= new Knight(false, x2,y2);
                                             }
                                             else if(promotion=='B'){
@@ -2263,7 +2264,7 @@ public class Chess {
                                             }
                                             else{
                                                 board[x2][y2]= new Queen(false, x2,y2);
-                                            }
+                                            }*/
                                         }
                                         return true;
                                     }
@@ -2292,7 +2293,7 @@ public class Chess {
                                 return true;
                             }
                             else{
-                                System.out.println("Illegal move, try again");
+                                //System.out.println("Illegal move, try again");
                                 return false;
                             }
                         }
@@ -2303,7 +2304,7 @@ public class Chess {
                                 board[x2][y2].y=y2;
                                 board[x1][y1]=null;
                                 if(x2==7){
-                                    if(promotion=='N'){
+                                    /*if(promotion=='N'){
                                         board[x2][y2]= new Knight(true, x2,y2);
                                     }
                                     else if(promotion=='B'){
@@ -2314,12 +2315,12 @@ public class Chess {
                                     }
                                     else{
                                         board[x2][y2]= new Queen(true, x2,y2);
-                                    }
+                                    }*/
                                 }
                                 return true;
                             }
                             else{
-                                System.out.println("Illegal move, try again");
+                                //System.out.println("Illegal move, try again");
                                 return false;
                             }
                         }
@@ -2344,7 +2345,7 @@ public class Chess {
                                         return true;
                                     }
                                     else if(board[x2][y2]==null || board[x1][y1].color==board[x2][y2].color){
-                                        System.out.println("Illegal move, try again");
+                                        //System.out.println("Illegal move, try again");
                                         return false;
                                     }
                                     else{
@@ -2353,7 +2354,7 @@ public class Chess {
                                         board[x2][y2].y=y2;
                                         board[x1][y1]=null;
                                         if(x2==7){
-                                            if(promotion=='N'){
+                                            /*if(promotion=='N'){
                                                 board[x2][y2]= new Knight(true, x2,y2);
                                             }
                                             else if(promotion=='B'){
@@ -2364,7 +2365,7 @@ public class Chess {
                                             }
                                             else{
                                                 board[x2][y2]= new Queen(true, x2,y2);
-                                            }
+                                            }*/
                                         }
                                         return true;
                                     }
@@ -2386,7 +2387,7 @@ public class Chess {
                                         return true;
                                     }
                                     else if(board[x2][y2]==null || board[x1][y1].color==board[x2][y2].color){
-                                        System.out.println("Illegal move, try again");
+                                        //System.out.println("Illegal move, try again");
                                         return false;
                                     }
                                     else{
@@ -2395,7 +2396,7 @@ public class Chess {
                                         board[x2][y2].y=y2;
                                         board[x1][y1]=null;
                                         if(x2==7){
-                                            if(promotion=='N'){
+                                            /*if(promotion=='N'){
                                                 board[x2][y2]= new Knight(true, x2,y2);
                                             }
                                             else if(promotion=='B'){
@@ -2406,7 +2407,7 @@ public class Chess {
                                             }
                                             else{
                                                 board[x2][y2]= new Queen(true, x2,y2);
-                                            }
+                                            }*/
                                         }
                                         return true;
                                     }
@@ -2430,11 +2431,11 @@ public class Chess {
                     }
                 }
                 else{
-                    System.out.println("Illegal move, try again");
+                    //System.out.println("Illegal move, try again");
                     return false;
                 }
         }
-        System.out.println("Illegal move, try again");
+        //System.out.println("Illegal move, try again");
         return false;
     }
 }
