@@ -19,6 +19,20 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".SavedPage"
+            android:label="Saved Games">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".PostgameActivity"
+            android:label="Results">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".PromotionActivity"
             android:label="Promote Pawn">
             <intent-filter>

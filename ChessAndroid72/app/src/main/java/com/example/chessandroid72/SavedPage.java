@@ -19,7 +19,7 @@ public class SavedPage extends AppCompatActivity {
         setContentView(R.layout.savedlist);
         listView = findViewById(R.id.game_list);
         //savedGames=getResources().getStringArray(R.array.);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,R.layout.promotion, savedGames);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,R.layout.savedlist, savedGames);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
