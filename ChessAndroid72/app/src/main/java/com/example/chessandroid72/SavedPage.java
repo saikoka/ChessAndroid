@@ -10,17 +10,29 @@ import android.widget.ListView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SavedPage extends AppCompatActivity {
     private ListView listView;
-    private String[] savedGames;
+    private List<String> savedGames = new ArrayList<>();
+
+
+
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.savedlist);
         listView = findViewById(R.id.game_list);
-        //savedGames=getResources().getStringArray(R.array.);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,R.layout.savedlist, savedGames);
+
+        savedGames.add("temp");
+        savedGames.add("second temp");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,R.layout.promotion, savedGames);
         listView.setAdapter(adapter);
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
