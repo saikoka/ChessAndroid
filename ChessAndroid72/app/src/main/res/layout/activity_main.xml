@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:layout_centerInParent="true"
     android:orientation="horizontal"
-    tools:context=".MainActivity">
+    tools:context=".ChessActivity">
 
 
     <GridView

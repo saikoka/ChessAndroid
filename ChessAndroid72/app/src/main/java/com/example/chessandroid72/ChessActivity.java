@@ -3,14 +3,11 @@ package com.example.chessandroid72;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.Toast;
@@ -18,10 +15,7 @@ import android.widget.Toast;
 import java.util.Arrays;
 
 import model.Bishop;
-import model.Chess;
-import model.King;
 import model.Knight;
-import model.Pawn;
 import model.Piece;
 import model.Queen;
 import model.Rook;
@@ -31,7 +25,7 @@ import static model.Chess.checkMate;
 import static model.Chess.inCheck;
 import static model.Chess.movePiece;
 
-public class MainActivity extends AppCompatActivity {
+public class ChessActivity extends AppCompatActivity {
     public Piece[][] prevBoard=null;
     public BoardAdapter customAdapter;
     static int promotionx;
@@ -77,7 +71,64 @@ public class MainActivity extends AppCompatActivity {
         Button draw = findViewById(R.id.draw);
         Button ai = findViewById(R.id.ai);
         chessboard.setAdapter(customAdapter);
+        ai.setOnClickListener(new View.OnClickListener(){
 
+            @Override
+            public void onClick(View v) {
+                for(int i=0; i<8;i++){
+                    for(int j=0; j<8;j++){
+                        if(board[i][j]!=null) {
+                            if (board[i][j].type == 'p' && board[i][j].color == turn) {
+                                if (turn == false) {//white
+                                    if ((i - 1) >= 0) {
+                                        if (board[i - 1][j] == null) {
+                                            prevBoard=deepCopy(board);
+                                            board[i - 1][j] = board[i][j];
+                                            board[i - 1][j].x = i - 1;
+                                            board[i][j] = null;
+                                            turn = !turn;
+                                            customAdapter.notifyDataSetChanged();
+                                            return;
+                                        }
+                                    }
+                                }
+                                else {
+
+                                    if ((i + 1) <= 7) {
+
+                                        if (board[i + 1][j] == null) {
+                                            prevBoard=deepCopy(board);
+                                            board[i + 1][j] = board[i][j];
+                                            board[i + 1][j].x = i + 1;
+                                            board[i][j] = null;
+                                            turn = !turn;
+                                            customAdapter.notifyDataSetChanged();
+                                            return;
+                                        }
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        draw.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        resign.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         undo.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -135,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
                                 if (board[0][i].getPiece().equals("wp")) {
                                     promotionx = 0;
                                     promotiony = i;
-                                    Intent intent = new Intent(MainActivity.this, PromotionActivity.class);
+                                    Intent intent = new Intent(ChessActivity.this, PromotionActivity.class);
                                     startActivityForResult(intent, 1);
                                     return;
                                     //getPromotion(promotionString);
@@ -146,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
                                 if (board[7][i].getPiece().equals("bp")) {
                                     promotionx = 7;
                                     promotiony = i;
-                                    Intent intent = new Intent(MainActivity.this, PromotionActivity.class);
+                                    Intent intent = new Intent(ChessActivity.this, PromotionActivity.class);
                                     startActivityForResult(intent, 1);
                                     return;
                                     //Toast.makeText(getApplicationContext(), realError, Toast.LENGTH_LONG).show();
