@@ -28,6 +28,8 @@ public class MainPageActivity extends AppCompatActivity {
         gameList.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(MainPageActivity.this, SavedPage.class);
+                startActivity(intent);
 
             }
         });
