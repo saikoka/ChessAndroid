@@ -1,15 +1,21 @@
 package com.example.chessandroid72;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.Toast;
+
+import java.util.Arrays;
 
 import model.Bishop;
 import model.Chess;
@@ -26,11 +32,39 @@ import static model.Chess.inCheck;
 import static model.Chess.movePiece;
 
 public class MainActivity extends AppCompatActivity {
-    //public static Piece[][] board = new Piece[8][8];
-    private BoardAdapter customAdapter;
+    public Piece[][] prevBoard=null;
+    public BoardAdapter customAdapter;
     static int promotionx;
     static int promotiony;
     static boolean turn=false;
+    public static String promotionString;
+    int currRow;
+    int row;
+    int currCol;
+    int col;
+    boolean clicked;
+    char promotionPiece;
+    Piece temp1;
+    char tempT1;
+    boolean check;
+    boolean tempC1;
+    boolean tempSp1;
+    int tempX1;
+    int tempY1;
+    Piece temp2;
+    int tempX2;
+    int tempY2;
+    char tempT2;
+    boolean tempC2;
+    boolean tempSp2;
+    private String[] promotionNames;
+    boolean result;
+    boolean newCheck;
+    CharSequence checkText= "check";
+    CharSequence whiteText= "White's Move";
+    CharSequence blackText= "Black's Move";
+    CharSequence error= "Illegal move, try again";
+    CharSequence emptyPrev= "No past move available.";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -38,41 +72,53 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         GridView chessboard = (GridView) findViewById(R.id.chessboard);
         customAdapter = new BoardAdapter(this);
+        Button undo = findViewById(R.id.undo);
+        Button resign = findViewById(R.id.resign);
+        Button draw = findViewById(R.id.draw);
+        Button ai = findViewById(R.id.ai);
         chessboard.setAdapter(customAdapter);
+
+        undo.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                if(prevBoard==null){
+                    Toast.makeText(getApplicationContext(),emptyPrev, Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    board=prevBoard;
+                    turn=!turn;
+                    customAdapter.notifyDataSetChanged();
+                }
+            }
+        });
         chessboard.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            int currRow;
-            int newRow;
-            int currCol;
-            int newCol;
-            boolean clicked;
 
-            boolean check=false;
 
-            CharSequence checkText= "check";
-            CharSequence whiteText= "White's Move";
-            CharSequence blackText= "Black's Move";
-            CharSequence error= "Illegal move, try again";
+
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int row = position/8;
-                int col = position%8;
+                row = position/8;
+                col = position%8;
+
                 if(clicked){
                     //Log.i("position", "position x is :"+row+"  pos y is :"+col);
                     //Log.i("position", "position x2 is :"+currRow+"  pos y2 is :"+currCol);
-                    char promotionPiece= ' ';
-                    Piece temp1 = board[currRow][currCol];
-                    char tempT1=board[currRow][currCol].type;
-                    boolean tempC1=board[currRow][currCol].color;
-                    boolean tempSp1=board[currRow][currCol].special;
-                    int tempX1=board[currRow][currCol].x;
-                    int tempY1=board[currRow][currCol].y;
+                    prevBoard=deepCopy(board);
+                    promotionPiece= ' ';
+                    temp1 = board[currRow][currCol];
+                    tempT1=board[currRow][currCol].type;
+                    tempC1=board[currRow][currCol].color;
+                    tempSp1=board[currRow][currCol].special;
+                    tempX1=board[currRow][currCol].x;
+                    tempY1=board[currRow][currCol].y;
 
-                    Piece temp2 = board[row][col];
-                    int tempX2=0;
-                    int tempY2=0;
-                    char tempT2=0;
-                    boolean tempC2=false;
-                    boolean tempSp2=false;
+                    temp2 = board[row][col];
+                    tempX2=0;
+                    tempY2=0;
+                    tempT2=0;
+                    tempC2=false;
+                    tempSp2=false;
                     if (board[row][col]!=null){
                         tempX2=board[row][col].x;
                         tempY2=board[row][col].y;
@@ -82,10 +128,35 @@ public class MainActivity extends AppCompatActivity {
 
                     }
 
-                    boolean result = movePiece(currRow,currCol,row,col,board,turn);
+                    result = movePiece(currRow,currCol,row,col,board,turn);
+                    if(result){
+                        for(int i=0;i<7;i++){
+                            if(board[0][i]!=null) {
+                                if (board[0][i].getPiece().equals("wp")) {
+                                    promotionx = 0;
+                                    promotiony = i;
+                                    Intent intent = new Intent(MainActivity.this, PromotionActivity.class);
+                                    startActivityForResult(intent, 1);
+                                    return;
+                                    //getPromotion(promotionString);
+
+                                }
+                            }
+                            if(board[7][i]!=null) {
+                                if (board[7][i].getPiece().equals("bp")) {
+                                    promotionx = 7;
+                                    promotiony = i;
+                                    Intent intent = new Intent(MainActivity.this, PromotionActivity.class);
+                                    startActivityForResult(intent, 1);
+                                    return;
+                                    //Toast.makeText(getApplicationContext(), realError, Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        }
+                    }
                     if(check) {//already in check
 
-                        boolean newCheck = inCheck(board, turn);
+                        newCheck = inCheck(board, turn);
                         if (newCheck){//did not fix
 
                             //System.out.println("Illegal move, try again");
@@ -117,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                     }else{//wasnt in check
-                        boolean newCheck = inCheck(board, turn);
+                        newCheck = inCheck(board, turn);
                         if (newCheck){
                             //System.out.println("moved into check");
                             //System.out.println("Illegal move, try again");
@@ -154,24 +225,8 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
                     }
                     else{
-                        for(int i=0;i<7;i++){
-                            if(board[0][i]!=null) {
-                                if (board[0][i].getPiece().equals("wp")) {
-                                    promotionx = 0;
-                                    promotiony = i;
-                                    openDialog();
-                                    customAdapter.notifyDataSetChanged();
-                                }
-                            }
-                            if(board[7][i]!=null) {
-                                if (board[7][i].getPiece().equals("bp")) {
-                                    promotionx = 7;
-                                    promotiony = i;
-                                    openDialog();
-                                    customAdapter.notifyDataSetChanged();
-                                }
-                            }
-                        }
+
+                        //Log.i("XD", String.valueOf(turn));
                         turn=!turn;
                         check=inCheck(board,turn);
                         if (check){
@@ -207,14 +262,145 @@ public class MainActivity extends AppCompatActivity {
 
 
                 customAdapter.notifyDataSetChanged();
+
             }
         });
 
     }
-    public void openDialog(){
+    public static Piece[][] deepCopy(Piece[][] original) {
+        if (original == null) {
+            return null;
+        }
+
+        final Piece[][] result = new Piece[original.length][];
+        for (int i = 0; i < original.length; i++) {
+            result[i] = Arrays.copyOf(original[i], original[i].length);
+        }
+        return result;
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==1){
+            if(resultCode==RESULT_OK){
+                promotionString = data.getStringExtra("piece");
+                getPromotion(promotionString);
+                if(check) {//already in check
+
+                    newCheck = inCheck(board, turn);
+                    if (newCheck){//did not fix
+
+                        //System.out.println("Illegal move, try again");
+
+                        board[currRow][currCol]=temp1;
+                        board[currRow][currCol].type=tempT1;
+                        board[currRow][currCol].special=tempSp1;
+                        board[currRow][currCol].color=tempC1;
+                        board[currRow][currCol].x=tempX1;
+                        board[currRow][currCol].y=tempY1;
+
+                        board[row][col]=temp2;
+                        if (temp2!=null){
+                            board[row][col].x=tempX2;
+                            board[row][col].y=tempY2;
+                            board[row][col].type=tempT2;
+                            board[row][col].special=tempSp2;
+                            board[row][col].color=tempC2;
+
+                        }
+                        //System.out.println("SPECIAL BOARD PRINT");
+                        //printBoard(board);//temp to check that move is undone
+                        result=false;
+                    }else{//fixed
+                        //System.out.println("you moved out of check");
+
+                        check=false;
+                    }
+
+
+                }else{//wasnt in check
+                    newCheck = inCheck(board, turn);
+                    if (newCheck){
+                        //System.out.println("moved into check");
+                        //System.out.println("Illegal move, try again");
+
+                        board[currRow][currCol]=temp1;
+                        board[currRow][currCol].type=tempT1;
+                        board[currRow][currCol].special=tempSp1;
+                        board[currRow][currCol].color=tempC1;
+                        board[currRow][currCol].x=tempX1;
+                        board[currRow][currCol].y=tempY1;
+
+                        board[row][col]=temp2;
+                        if (temp2!=null){
+                            board[row][col].x=tempX2;
+                            board[row][col].y=tempY2;
+                            board[row][col].type=tempT2;
+                            board[row][col].special=tempSp2;
+                            board[row][col].color=tempC2;
+
+                        }
+                        result=false;
+                        // System.out.println("SPECIAL BOARD PRINT");
+                        //printBoard(board);//temp to check that move is undone
+                    }
+                    else{
+                        //System.out.println("didnt put self in check");
+                    }
+                }
+                    /*board[row][col]=board[currRow][currCol];
+                    board[row][col].x=row;
+                    board[row][col].y=col;
+                    board[currRow][currCol]=null;*/
+                if(!result){
+                    Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
+                }
+                else{
+
+                    //Log.i("XD", String.valueOf(turn));
+                    turn=!turn;
+                    check=inCheck(board,turn);
+                    if (check){
+                        if (checkMate(board, turn,row, col)){
+                            if(!turn){
+                                //System.out.println("Black wins");
+                            }else {
+                                //System.out.println("White Wins");
+                            }
+
+                        }
+                    }
+                }
+                if(check) {
+                    Toast.makeText(getApplicationContext(), checkText, Toast.LENGTH_SHORT).show();
+                }
+                if(!turn) {
+                    Toast.makeText(getApplicationContext(), whiteText, Toast.LENGTH_SHORT).show();
+
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), blackText, Toast.LENGTH_SHORT).show();
+
+                }
+                clicked=false;
+            }
+            else{
+                currRow=row;
+                currCol=col;
+                clicked=true;
+            }
+            //Log.i("position", "position x is :"+row+"  pos y is :"+col);
+
+
+            customAdapter.notifyDataSetChanged();
+
+        }
+    }
+
+    /*public void openDialog(){
         PromotionDialog promotionDialog = new PromotionDialog();
         promotionDialog.show(getSupportFragmentManager(),"Promotion Dialog");
-    }
+    }*/
 
     public static void getPromotion(String piece){
         switch(piece){
@@ -224,15 +410,40 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case "Knight":
                 board[promotionx][promotiony]= new Knight(turn, promotionx, promotiony);
+
                 break;
             case "Bishop":
                 board[promotionx][promotiony]= new Bishop(turn, promotionx, promotiony);
+
                 break;
             case "Rook":
-                board[promotionx][promotiony]= new Rook(turn, promotionx, promotiony);
+                board[promotionx][promotiony]= new Rook(!turn, promotionx, promotiony);
+
                 break;
         }
 
 
     }
+
+    /*@Override
+    public void getString(String pieceName) {
+        switch(pieceName){
+            case "Queen":
+                board[promotionx][promotiony]= new Queen(turn, promotionx, promotiony);
+
+                break;
+            case "Knight":
+                board[promotionx][promotiony]= new Knight(turn, promotionx, promotiony);
+
+                break;
+            case "Bishop":
+                board[promotionx][promotiony]= new Bishop(turn, promotionx, promotiony);
+
+                break;
+            case "Rook":
+                board[promotionx][promotiony]= new Rook(turn, promotionx, promotiony);
+
+                break;
+        }
+    }*/
 }

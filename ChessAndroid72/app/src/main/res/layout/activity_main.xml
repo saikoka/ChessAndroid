@@ -6,16 +6,98 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_centerInParent="true"
+    android:orientation="horizontal"
     tools:context=".MainActivity">
 
 
     <GridView
+        android:id="@+id/chessboard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/chessboard"
-        android:numColumns="8"
-        android:gravity="center"
         android:columnWidth="50dp"
+        android:gravity="center"
+        android:numColumns="8"
 
         />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="-68dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/undo"
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="67dp"
+            android:layout_weight="1"
+            android:text="Undo" />
+
+        <Button
+            android:id="@+id/draw"
+            android:layout_width="107dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="124dp"
+            android:layout_weight="1"
+            android:text="Draw" />
+
+        <Button
+            android:id="@+id/resign"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="59dp"
+            android:layout_weight="1"
+            android:text="Resign" />
+
+        <Button
+            android:id="@+id/ai"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="69dp"
+            android:text="AI" />
+    </LinearLayout>
+
+    <!--<Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="67dp"
+        android:layout_weight="1"
+        android:text="Undo" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="124dp"
+        android:layout_weight="1"
+        android:text="Draw" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="59dp"
+        android:text="Resign" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="69dp"
+        android:text="AI" />-->
+
 </RelativeLayout>
