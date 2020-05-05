@@ -147,7 +147,7 @@ public class ChessActivity extends AppCompatActivity {
                     }
                 }
                 else {
-                    customAdapter.cleanBoard();//reset board
+                    //customAdapter.cleanBoard();//reset board
                     turn = false;//reset turn
                     Bundle bundle = new Bundle();
                     bundle.putString(color, "draw");
@@ -165,7 +165,7 @@ public class ChessActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                customAdapter.cleanBoard();//reset board
+                //customAdapter.cleanBoard();//reset board
                 Bundle bundle = new Bundle();
                 if (turn){
                     bundle.putString(color, "White Wins");

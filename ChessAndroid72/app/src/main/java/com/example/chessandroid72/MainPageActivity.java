@@ -18,9 +18,14 @@ import java.util.ArrayList;
 
 public class MainPageActivity extends AppCompatActivity {
     public static final String type = null;
+    public BoardAdapter customAdapter;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+        customAdapter = new BoardAdapter(this);
+        customAdapter.cleanBoard();
+
         setContentView(R.layout.main);
         Button newGame=findViewById(R.id.new_game);
         Button gameList= findViewById(R.id.game_list);
