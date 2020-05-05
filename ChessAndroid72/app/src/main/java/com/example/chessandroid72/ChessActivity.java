@@ -12,7 +12,9 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import model.Bishop;
 import model.Knight;
@@ -26,6 +28,7 @@ import static model.Chess.inCheck;
 import static model.Chess.movePiece;
 
 public class ChessActivity extends AppCompatActivity {
+    public List <BoardAdapter> states = new ArrayList<>();
     public Piece[][] prevBoard=null;
     public BoardAdapter customAdapter;
     static int promotionx;
@@ -444,6 +447,7 @@ public class ChessActivity extends AppCompatActivity {
 
 
             customAdapter.notifyDataSetChanged();
+            states.add(customAdapter);
 
         }
     }

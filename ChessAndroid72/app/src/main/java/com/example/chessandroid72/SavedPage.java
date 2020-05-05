@@ -36,12 +36,8 @@ public class SavedPage extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                /*String value = (String)parent.getItemAtPosition(position);
-                Intent intent=getIntent();
-                Intent result = new Intent();
-                result.putExtra("piece", value);
-                setResult(RESULT_OK, result);
-                finish();*/
+                Intent intent = new Intent(SavedPage.this, ReplayGame.class);
+                startActivity(intent);
             }
         });
     }

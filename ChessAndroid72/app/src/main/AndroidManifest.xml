@@ -26,6 +26,13 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ReplayGame"
+            android:label="Game Replay">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".PostgameActivity"
             android:label="Results">
             <intent-filter>
