@@ -55,11 +55,15 @@ public class ReplayGame extends AppCompatActivity{
 
         Toast.makeText(getApplicationContext(), moves + "moves", Toast.LENGTH_SHORT).show();
 
+        final GameSer finalReplay = replay;
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (count<moves){
-
+                    board= finalReplay.states.get(count+1);
+                    count+=2;
+                    customAdapter.notifyDataSetChanged();
+                    return;
                 }else {
                     Toast.makeText(getApplicationContext(), "game finished", Toast.LENGTH_SHORT).show();
                 }

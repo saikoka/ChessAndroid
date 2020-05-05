@@ -95,6 +95,9 @@ public class ChessActivity extends AppCompatActivity {
                                             board[i - 1][j].x = i - 1;
                                             board[i][j] = null;
                                             turn = !turn;
+                                            Piece[][] ex = new Piece[8][8];
+                                            fullSend(ex);
+                                            curr.states.add(ex);
                                             customAdapter.notifyDataSetChanged();
                                             return;
                                         }
@@ -110,6 +113,9 @@ public class ChessActivity extends AppCompatActivity {
                                             board[i + 1][j].x = i + 1;
                                             board[i][j] = null;
                                             turn = !turn;
+                                            Piece[][] ex = new Piece[8][8];
+                                            fullSend(ex);
+                                            curr.states.add(ex);
                                             customAdapter.notifyDataSetChanged();
                                             return;
                                         }
@@ -168,7 +174,7 @@ public class ChessActivity extends AppCompatActivity {
                 else{
                     board=prevBoard;
                     turn=!turn;
-
+                    curr.states.remove(curr.states.size()-1);
                     customAdapter.notifyDataSetChanged();
                 }
             }
@@ -341,7 +347,9 @@ public class ChessActivity extends AppCompatActivity {
                 }
                 //Log.i("position", "position x is :"+row+"  pos y is :"+col);
 
-
+                Piece[][] ex = new Piece[8][8];
+                fullSend(ex);
+                curr.states.add(ex);
                 customAdapter.notifyDataSetChanged();
 
             }
@@ -444,8 +452,14 @@ public class ChessActivity extends AppCompatActivity {
                     if (check){
                         if (checkMate(board, turn,row, col)){
                             if(!turn){
+                                Piece[][] ex = new Piece[8][8];
+                                fullSend(ex);
+                                curr.states.add(ex);
                                 //System.out.println("Black wins");
                             }else {
+                                Piece[][] ex = new Piece[8][8];
+                                fullSend(ex);
+                                curr.states.add(ex);
                                 //System.out.println("White Wins");
                             }
 
@@ -472,9 +486,19 @@ public class ChessActivity extends AppCompatActivity {
             }
             //Log.i("position", "position x is :"+row+"  pos y is :"+col);
 
-
+            /*Piece[][] ex = new Piece[8][8];
+            fullSend(ex);
+            curr.states.add(ex);*/
             customAdapter.notifyDataSetChanged();
 
+
+        }
+    }
+    public void fullSend(Piece [][] x){
+        for (int i = 0; i<8; i++){
+            for (int j = 0; j<8; j++){
+                x[i][j]=board[i][j];
+            }
         }
     }
 
