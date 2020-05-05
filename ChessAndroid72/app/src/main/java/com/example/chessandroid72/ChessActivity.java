@@ -466,6 +466,7 @@ public class ChessActivity extends AppCompatActivity {
                     board[currRow][currCol]=null;*/
                 if(!result){
                     Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
+                    curr.states.remove(curr.states.size()-1);
                 }
                 else{
 
