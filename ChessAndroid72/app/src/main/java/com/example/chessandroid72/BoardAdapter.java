@@ -57,6 +57,13 @@ public class BoardAdapter extends BaseAdapter {
         board[6][6]= new Pawn(false,6,6);
         board[6][7]= new Pawn(false,6,7);
     }
+    public void cleanBoard(){
+        for (int i = 0; i<8; i++){
+            for (int j = 0; j<8; j++){
+                board[i][j]=null;
+            }
+        }
+    }
     @Override
     public int getCount() {
         return 64;

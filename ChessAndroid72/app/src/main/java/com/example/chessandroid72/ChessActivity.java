@@ -12,6 +12,9 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,7 +31,9 @@ import static model.Chess.inCheck;
 import static model.Chess.movePiece;
 
 public class ChessActivity extends AppCompatActivity {
-    public List <BoardAdapter> states = new ArrayList<>();
+    GameSer curr = new GameSer("default");
+    public static final String color = null;
+
     public Piece[][] prevBoard=null;
     public BoardAdapter customAdapter;
     static int promotionx;
@@ -121,6 +126,15 @@ public class ChessActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
+                customAdapter.cleanBoard();//reset board
+                turn=false;//reset turn
+                Bundle bundle = new Bundle();
+                bundle.putString(color, "draw");
+
+                Intent intent = new Intent(ChessActivity.this, PostgameActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                finish();
 
             }
         });
@@ -129,6 +143,18 @@ public class ChessActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
+                customAdapter.cleanBoard();//reset board
+                Bundle bundle = new Bundle();
+                if (turn){
+                    bundle.putString(color, "White Wins");
+                }else {
+                    bundle.putString(color, "Black Wins");
+                }
+                turn=false;//reset turn
+                Intent intent = new Intent(ChessActivity.this, PostgameActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                finish();
 
             }
         });
@@ -142,6 +168,7 @@ public class ChessActivity extends AppCompatActivity {
                 else{
                     board=prevBoard;
                     turn=!turn;
+
                     customAdapter.notifyDataSetChanged();
                 }
             }
@@ -447,7 +474,6 @@ public class ChessActivity extends AppCompatActivity {
 
 
             customAdapter.notifyDataSetChanged();
-            states.add(customAdapter);
 
         }
     }

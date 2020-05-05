@@ -26,7 +26,15 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
-        android:layout_centerVertical="true"
         android:layout_marginBottom="275dp"
-        android:text="Recorded Game List" />
+        android:text="Recorded Game List By Name" />
+
+    <Button
+        android:id="@+id/game_list2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="140dp"
+        android:text="Recorded Game List By Date" />
 </RelativeLayout>
