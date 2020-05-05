@@ -207,6 +207,11 @@ public class ChessActivity extends AppCompatActivity {
                 if(clicked){
                     //Log.i("position", "position x is :"+row+"  pos y is :"+col);
                     //Log.i("position", "position x2 is :"+currRow+"  pos y2 is :"+currCol);
+                    if(board[currRow][currCol]==null){
+                        Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
+                        clicked=false;
+                        return;
+                    }
                     prevBoard=deepCopy(board);
                     promotionPiece= ' ';
                     temp1 = board[currRow][currCol];
@@ -334,7 +339,7 @@ public class ChessActivity extends AppCompatActivity {
                         check=inCheck(board,turn);
                         if (check){
                             if (checkMate(board, turn,row, col)){
-                                customAdapter.cleanBoard();//reset board
+
                                 Bundle bundle = new Bundle();
                                 if (turn){
                                     bundle.putString(color, "White Wins");
@@ -475,17 +480,17 @@ public class ChessActivity extends AppCompatActivity {
                     check=inCheck(board,turn);
                     if (check){
                         if (checkMate(board, turn,row, col)){
-                            if(!turn){
-                                Piece[][] ex = new Piece[8][8];
-                                fullSend(ex);
-                                curr.states.add(ex);
-                                //System.out.println("Black wins");
+                            Bundle bundle = new Bundle();
+                            if (turn){
+                                bundle.putString(color, "White Wins");
                             }else {
-                                Piece[][] ex = new Piece[8][8];
-                                fullSend(ex);
-                                curr.states.add(ex);
-                                //System.out.println("White Wins");
+                                bundle.putString(color, "Black Wins");
                             }
+                            turn=false;//reset turn
+                            Intent intent = new Intent(ChessActivity.this, PostgameActivity.class);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                            finish();
 
                         }
                     }

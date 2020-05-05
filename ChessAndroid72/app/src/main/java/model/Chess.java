@@ -1479,7 +1479,9 @@ public class Chess {
      * @return true if errors in moving the piece, false otherwise
      */
     public static boolean movePiece(int x1, int y1, int x2, int y2,Piece[][] board,boolean tf){//returns true if no errors, false if errors
-
+        if(board[x1][y1]==null){
+            return false;
+        }
         if((!tf && board[x1][y1].color)||(tf && !board[x1][y1].color)){//White's move, But select Black, or Black's move, but select White
             //System.out.println("Illegal move, try again");
             return false;
