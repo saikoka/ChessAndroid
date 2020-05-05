@@ -62,11 +62,15 @@ public class ChessActivity extends AppCompatActivity {
     private String[] promotionNames;
     boolean result;
     boolean newCheck;
+    boolean drawClick;
     CharSequence checkText= "check";
     CharSequence whiteText= "White's Move";
+    CharSequence whiteDraw= "white player must elect to draw";
+    CharSequence blackDraw= "black player must elect to draw";
     CharSequence blackText= "Black's Move";
     CharSequence error= "Illegal move, try again";
     CharSequence emptyPrev= "No past move available.";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -76,7 +80,7 @@ public class ChessActivity extends AppCompatActivity {
         customAdapter = new BoardAdapter(this);
         Button undo = findViewById(R.id.undo);
         Button resign = findViewById(R.id.resign);
-        Button draw = findViewById(R.id.draw);
+        final Button draw = findViewById(R.id.draw);
         Button ai = findViewById(R.id.ai);
         chessboard.setAdapter(customAdapter);
         ai.setOnClickListener(new View.OnClickListener(){
@@ -132,15 +136,27 @@ public class ChessActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                customAdapter.cleanBoard();//reset board
-                turn=false;//reset turn
-                Bundle bundle = new Bundle();
-                bundle.putString(color, "draw");
+                if(!drawClick){
+                    if(turn){
+                        Toast.makeText(getApplicationContext(), whiteDraw, Toast.LENGTH_SHORT).show();
+                        drawClick=true;
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(), blackDraw, Toast.LENGTH_SHORT).show();
+                        drawClick=true;
+                    }
+                }
+                else {
+                    customAdapter.cleanBoard();//reset board
+                    turn = false;//reset turn
+                    Bundle bundle = new Bundle();
+                    bundle.putString(color, "draw");
 
-                Intent intent = new Intent(ChessActivity.this, PostgameActivity.class);
-                intent.putExtras(bundle);
-                startActivity(intent);
-                finish();
+                    Intent intent = new Intent(ChessActivity.this, PostgameActivity.class);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                    finish();
+                }
 
             }
         });
@@ -187,7 +203,7 @@ public class ChessActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 row = position/8;
                 col = position%8;
-
+                drawClick=false;
                 if(clicked){
                     //Log.i("position", "position x is :"+row+"  pos y is :"+col);
                     //Log.i("position", "position x2 is :"+currRow+"  pos y2 is :"+currCol);
@@ -318,11 +334,18 @@ public class ChessActivity extends AppCompatActivity {
                         check=inCheck(board,turn);
                         if (check){
                             if (checkMate(board, turn,row, col)){
-                                if(!turn){
-                                    //System.out.println("Black wins");
+                                customAdapter.cleanBoard();//reset board
+                                Bundle bundle = new Bundle();
+                                if (turn){
+                                    bundle.putString(color, "White Wins");
                                 }else {
-                                    //System.out.println("White Wins");
+                                    bundle.putString(color, "Black Wins");
                                 }
+                                turn=false;//reset turn
+                                Intent intent = new Intent(ChessActivity.this, PostgameActivity.class);
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+                                finish();
 
                             }
                         }

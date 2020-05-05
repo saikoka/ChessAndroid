@@ -25,7 +25,6 @@ public class ReplayGame extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
         Intent intent = getIntent();
         String message = intent.getStringExtra(SavedPage.choice);
         GameSer replay = findGame(message);
@@ -47,8 +46,10 @@ public class ReplayGame extends AppCompatActivity{
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                customAdapter.cleanBoard();
                 finish();
                 Intent intent = new Intent(ReplayGame.this, MainPageActivity.class);
+
                 startActivity(intent);
             }
         });
