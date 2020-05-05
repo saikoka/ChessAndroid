@@ -207,6 +207,11 @@ public class ChessActivity extends AppCompatActivity {
                 if(clicked){
                     //Log.i("position", "position x is :"+row+"  pos y is :"+col);
                     //Log.i("position", "position x2 is :"+currRow+"  pos y2 is :"+currCol);
+                    if(board[currRow][currCol]==null){
+                        Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
+                        clicked=false;
+                        return;
+                    }
                     prevBoard=deepCopy(board);
                     promotionPiece= ' ';
                     temp1 = board[currRow][currCol];
