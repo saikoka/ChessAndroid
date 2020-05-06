@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
@@ -25,6 +26,21 @@ public class MainPageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         customAdapter = new BoardAdapter(this);
         customAdapter.cleanBoard();
+
+        String path = getApplicationContext().getFilesDir()+"/"+"mydir" + "/" +"games";
+        File file = new File(path);
+        try {
+            FileInputStream fis = new FileInputStream(file);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            for(GameSer gameSer = (GameSer) ois.readObject(); gameSer!=null; gameSer = (GameSer) ois.readObject()){
+                GameSer.gameSerList.add(gameSer);
+            }
+            ois.close();
+            fis.close();
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
         setContentView(R.layout.main);
         Button newGame=findViewById(R.id.new_game);

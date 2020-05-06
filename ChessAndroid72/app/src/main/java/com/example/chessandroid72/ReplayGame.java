@@ -54,7 +54,7 @@ public class ReplayGame extends AppCompatActivity{
             }
         });
 
-        Toast.makeText(getApplicationContext(), moves + "moves", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), moves + "moves", Toast.LENGTH_SHORT).show();
 
         final GameSer finalReplay = replay;
         next.setOnClickListener(new View.OnClickListener() {

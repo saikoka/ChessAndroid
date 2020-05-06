@@ -1,5 +1,6 @@
 package com.example.chessandroid72;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -8,8 +9,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -27,7 +30,7 @@ import static com.example.chessandroid72.GameSer.findGame;
 
 public class PostgameActivity extends AppCompatActivity{
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.postgame);
 
@@ -52,6 +55,24 @@ public class PostgameActivity extends AppCompatActivity{
 
                 temp.name = val;
                 temp.date = dateFormat.format(date);
+
+                File file = new File(getApplicationContext().getFilesDir(),"mydir");
+                if (!file.exists()){
+                    file.mkdir();
+                }
+
+                try {
+                    File xfile = new File(file,"games");
+                    FileOutputStream fos = new FileOutputStream(xfile);
+                    ObjectOutputStream oos = new ObjectOutputStream(fos);
+                    for (GameSer gameSer: GameSer.gameSerList){
+                        oos.writeObject(gameSer);
+                    }
+                    oos.close();
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
                 Intent intent = new Intent(PostgameActivity.this, MainPageActivity.class);
                 startActivity(intent);
